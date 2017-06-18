@@ -111,7 +111,7 @@ ggplot(IBEX35_Scaled[IBEX35_Scaled$Symbol == "POP.MC" | IBEX35_Scaled$Symbol == 
 ggplot(IBEX35_data[IBEX35_data$Symbol == "POP.MC" | IBEX35_data$Symbol == "ENG.MC",], aes(Date, Adj.Close, group = Symbol, col = Symbol)) + geom_line() + ggtitle("Most Dissimilar Stocks") + theme_economist() + theme(legend.position="right")
 
                                                   
-                                                  IBEX35_Scaled2 <- IBEX35_data %>% group_by(Symbol) %>% tq_transmute(select     = Adj.Close, 
+IBEX35_Scaled2 <- IBEX35_data %>% group_by(Symbol) %>% tq_transmute(select     = Adj.Close, 
                                                                    mutate_fun = periodReturn, 
                                                                    period     = "yearly", 
                                                                    type = "log",
