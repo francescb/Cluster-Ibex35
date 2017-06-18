@@ -110,3 +110,21 @@ ggplot(IBEX35_data[IBEX35_data$Symbol == "SAN.MC" | IBEX35_data$Symbol == "BBVA.
 ggplot(IBEX35_Scaled[IBEX35_Scaled$Symbol == "POP.MC" | IBEX35_Scaled$Symbol == "ENG.MC",], aes(Date, daily.returns, group = Symbol, col = Symbol)) + geom_line() + ggtitle("Most Dissimilar Stocks") + theme_economist() + theme(legend.position="right")
 ggplot(IBEX35_data[IBEX35_data$Symbol == "POP.MC" | IBEX35_data$Symbol == "ENG.MC",], aes(Date, Adj.Close, group = Symbol, col = Symbol)) + geom_line() + ggtitle("Most Dissimilar Stocks") + theme_economist() + theme(legend.position="right")
 
+                                                  
+                                                  IBEX35_Scaled2 <- IBEX35_data %>% group_by(Symbol) %>% tq_transmute(select     = Adj.Close, 
+                                                                   mutate_fun = periodReturn, 
+                                                                   period     = "yearly", 
+                                                                   type = "log",
+                                                                   col_rename = "yearly.returns") 
+
+
+
+return <- IBEX35_Scaled2 %>% group_by(Symbol) %>% summarise(return = mean(yearly.returns) * 100)
+return <- merge(return, clusters)
+return <- return[order(return$cluster),]
+return$cluster <- as.factor(return$cluster)
+
+
+
+ggplot(return, aes(Symbol, return, group = cluster, fill = cluster)) + geom_bar(stat = "identity") + facet_wrap(~cluster, scale = "free") + geom_hline(yintercept = 0)
+
